@@ -12,6 +12,13 @@ import java.io.IOException;
  * @Copyright：
  */
 public class OpenAiInterceptor implements Interceptor {
+
+    private String apiKey;
+
+    public OpenAiInterceptor(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
     @Override
     public Response intercept(Chain chain) throws IOException {
         return null;

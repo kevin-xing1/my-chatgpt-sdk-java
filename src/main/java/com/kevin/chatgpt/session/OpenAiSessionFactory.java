@@ -8,4 +8,6 @@ package com.kevin.chatgpt.session;
  */
 
 public interface OpenAiSessionFactory {
+
+    OpenAiSession openAiSession();
 }
