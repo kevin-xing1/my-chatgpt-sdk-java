@@ -58,7 +58,7 @@ public class ApiTest {
 
         //3.解析结果
         chatCompletionResponse.getChoices().forEach(chatChoice -> {
-            log.info("测试结果：{}",chatChoice.getMessage());
+            log.info("测试结果：{}", chatChoice.getMessage());
         });
     }
 }
