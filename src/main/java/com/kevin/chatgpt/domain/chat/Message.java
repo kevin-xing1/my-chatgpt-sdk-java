@@ -29,6 +29,10 @@ public class Message implements Serializable {
         this.name = builder.name;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     /**
      * 建造者模式
      */

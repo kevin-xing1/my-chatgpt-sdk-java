@@ -25,7 +25,7 @@ public class DefaultOpenAiSession implements OpenAiSession {
 
     @Override
     public ChatCompletionResponse completions(ChatCompletionRequest chatCompletionRequest) {
-        return null;
+        return this.openAiApi.completions(chatCompletionRequest).blockingGet();
     }
 
     @Override
