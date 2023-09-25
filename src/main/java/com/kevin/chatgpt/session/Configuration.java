@@ -1,10 +1,11 @@
 package com.kevin.chatgpt.session;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.kevin.chatgpt.IOpenAiApi;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.OkHttpClient;
+import okhttp3.sse.EventSource;
+import okhttp3.sse.EventSources;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -27,5 +28,17 @@ public class Configuration {
 
     @Getter
     private String apiHost;
+
+    @Getter
+    @Setter
+    private IOpenAiApi openAiApi;
+
+    @Getter
+    @Setter
+    private OkHttpClient okHttpClient;
+
+    public EventSource.Factory createRequestFactory() {
+        return EventSources.createFactory(okHttpClient);
+    }
 
 }

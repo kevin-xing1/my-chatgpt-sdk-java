@@ -1,5 +1,6 @@
 package com.kevin.chatgpt;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kevin.chatgpt.common.Constants;
 import com.kevin.chatgpt.domain.chat.ChatCompletionRequest;
 import com.kevin.chatgpt.domain.chat.ChatCompletionResponse;
@@ -11,10 +12,13 @@ import com.kevin.chatgpt.session.defaults.DefaultOpenAiSessionFactory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.sse.EventSource;
+import okhttp3.sse.EventSourceListener;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collections;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @description:
@@ -61,4 +65,28 @@ public class ApiTest {
             log.info("测试结果：{}", chatChoice.getMessage());
         });
     }
+
+    /**
+     * 此对话模型 3.5 接近于官网体验 & 流式应答
+     */
+    @Test
+    public void test_chat_completions_stream() throws JsonProcessingException, InterruptedException {
+        // 1.创建参数
+        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
+                .builder()
+                .stream(true)
+                .messages(Collections.singletonList(Message.builder().role(Constants.Role.USER).content("写一个Java冒泡排序").build()))
+                .model(ChatCompletionRequest.Model.GPT_3_5_TURBO.getCode())
+                .build();
+        // 2.发起请求
+        EventSource eventSource = openAiSession.chatCompletions(chatCompletionRequest, new EventSourceListener() {
+            @Override
+            public void onEvent(EventSource eventSource, String id, String type, String data) {
+                log.info("测试结果：{}", data);
+            }
+        });
+        //等待
+        new CountDownLatch(1).await();
+    }
+
 }

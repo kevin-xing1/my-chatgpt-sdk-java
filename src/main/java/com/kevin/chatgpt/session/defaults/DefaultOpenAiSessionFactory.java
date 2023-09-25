@@ -48,6 +48,7 @@ public class DefaultOpenAiSessionFactory implements OpenAiSessionFactory {
                 // 设置读取数据超时时间
                 .readTimeout(450, TimeUnit.SECONDS)
                 .build();
+        configuration.setOkHttpClient(okHttpClient);
 
         //3、创建API服务 类似于对DAO接口与数据库的连接数据源之间的操作
         IOpenAiApi openAiApi = new Retrofit.Builder()
@@ -60,8 +61,9 @@ public class DefaultOpenAiSessionFactory implements OpenAiSessionFactory {
                 .addConverterFactory(JacksonConverterFactory.create())
                 //构建 Retrofit 实例并创建 API 接口的实例，这个接口将用于发起具体的 API 请求
                 .build().create(IOpenAiApi.class);
+        configuration.setOpenAiApi(openAiApi);
 
-        return new DefaultOpenAiSession(openAiApi);
+        return new DefaultOpenAiSession(configuration);
     }
 
 }
